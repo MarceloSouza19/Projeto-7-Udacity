@@ -1,10 +1,13 @@
 package com.example.marce.projeto7udacity.Conexão;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.marce.projeto7udacity.Contract.LivrosContract;
+
+import java.util.List;
 
 public class ConexãoDbHelper extends SQLiteOpenHelper {
 
@@ -29,5 +32,13 @@ public class ConexãoDbHelper extends SQLiteOpenHelper {
     @Override
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         super.onDowngrade(db, oldVersion, newVersion);
+    }
+
+    public void inserirDados(List<ContentValues> listaConteudos){
+
+        SQLiteDatabase dbWrite = this.getWritableDatabase();
+
+        for(ContentValues conteudo : listaConteudos)
+        dbWrite.insert(LivrosContract.TABLE_NAME, null, conteudo);
     }
 }

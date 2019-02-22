@@ -20,12 +20,12 @@ public class LivrosContract implements BaseColumns {
 
     public static final String SQL_CREATE_ENTRIES = "CREATE TABLE " +TABLE_NAME +
             " (" + COLUNA_ID + " INTEGER PRIMARY KEY AUTOINCREMENT , " +
-            COLUNA_NOME_LIVRO + " TEXT_TYPE ," +
+            COLUNA_NOME_LIVRO + " TEXT ," +
             COLUNA_MODELO + " INTEGER ," +
             COLUNA_PREÇO + " REAL ," +
             COLUNA_QUANTIDADE + " INTEGER ,"+
-            COLUNA_FORNECEDOR+" TEXT_TYPE ,"+
-            COLUNA_TELEFONE+" TEXT_TYPE);";
+            COLUNA_FORNECEDOR+" TEXT ,"+
+            COLUNA_TELEFONE+" TEXT);";
 
     public static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS "+TABLE_NAME;
 
