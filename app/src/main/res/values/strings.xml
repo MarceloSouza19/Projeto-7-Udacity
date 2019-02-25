@@ -27,9 +27,10 @@
     <string name="quem_vendeu">Quem foi que te vendeu?</string>
     <string name="telefone_contato">Telefone para contato</string>
     <string name="livros_para_vender">Livros à Venda</string>
-    <string name="livros_meu_estoque">Livros Em Meu Estoque</string>
+    <string name="livros_meu_estoque">Livros em meu Estoque</string>
     <string name="em_estoque">em Estoque</string>
     <string name="sem_estoque">Não tem mais :/</string>
+    <string name="fazer_cadastro">Faça um cadastro para começar com seu estoque!</string>
 
 
     <!--Hints-->

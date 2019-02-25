@@ -47,7 +47,7 @@
             android:paddingLeft="40dp"
             android:paddingTop="5dp"
             android:paddingRight="40dp"
-            android:text="Faça um cadastro para começar com seu estoque!"
+            android:text="@string/fazer_cadastro"
             android:textAlignment="center"
             android:textSize="24sp"
             android:textStyle="bold"/>

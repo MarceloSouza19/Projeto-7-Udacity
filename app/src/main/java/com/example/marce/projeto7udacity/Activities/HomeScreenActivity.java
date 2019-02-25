@@ -1,5 +1,6 @@
 package com.example.marce.projeto7udacity.Activities;
 
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -8,6 +9,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.WindowManager;
 
 import com.example.marce.projeto7udacity.Adapter.AdapterFragments;
 import com.example.marce.projeto7udacity.Adapter.BookCursorAdapter;
@@ -23,6 +25,7 @@ public class HomeScreenActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tela_principal);
 
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         TabLayout tabLayoutMain = findViewById(R.id.tabLayoutMain);
         ViewPager viewPagerMain = findViewById(R.id.viewPagerMain);
