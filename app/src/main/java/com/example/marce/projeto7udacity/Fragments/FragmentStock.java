@@ -33,7 +33,7 @@ public class FragmentStock extends Fragment implements LoaderManager.LoaderCallb
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-       View view =  LayoutInflater.from(getContext()).inflate(R.layout.fragment_stock,container,false);
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_stock, container, false);
 
         FloatingActionButton btnFlutuante = view.findViewById(R.id.testeB);
         btnFlutuante.setOnClickListener(new View.OnClickListener() {
@@ -47,15 +47,17 @@ public class FragmentStock extends Fragment implements LoaderManager.LoaderCallb
 
         ListView bookItemList = view.findViewById(R.id.recycler_item_livros);
 
-        mCursorAdapter = new BookCursorAdapter(getContext(),null);
+        mCursorAdapter = new BookCursorAdapter(getContext(), null);
 
         bookItemList.setAdapter(mCursorAdapter);
+
+        bookItemList.setEmptyView(view.findViewById(R.id.emptyList));
 
         bookItemList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                Intent intent = new Intent(getContext(),EditorOrAddActivity.class);
+                Intent intent = new Intent(getContext(), EditorOrAddActivity.class);
 
                 Uri currentBookUri = ContentUris.withAppendedId(BooksContract.CONTENT_URI, l);
 
@@ -65,7 +67,7 @@ public class FragmentStock extends Fragment implements LoaderManager.LoaderCallb
             }
         });
 
-        getLoaderManager().initLoader(1,null, this).forceLoad();
+        getLoaderManager().initLoader(1, null, this).forceLoad();
 
         return view;
     }
@@ -75,7 +77,9 @@ public class FragmentStock extends Fragment implements LoaderManager.LoaderCallb
         String[] projection = {
                 BooksContract._ID,
                 BooksContract.COLUNA_NOME_LIVRO,
-                BooksContract.COLUNA_DESCRICAO};
+                BooksContract.COLUNA_DESCRICAO,
+                BooksContract.COLUNA_PREÇO,
+                BooksContract.COLUNA_QUANTIDADE};
 
         // This loader will execute the ContentProvider's query method on a background thread
         return new CursorLoader(getContext(),   // Parent activity context

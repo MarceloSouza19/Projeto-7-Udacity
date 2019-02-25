@@ -9,29 +9,59 @@
         android:id="@+id/titulopagina"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="10dp"
         android:text="@string/livros_meu_estoque"
-        android:textSize="48sp"
-        android:textStyle="bold"
         android:textColor="@color/colorGrey"
-        android:layout_margin="10dp"/>
+        android:textSize="48sp"
+        android:textStyle="bold" />
 
     <ListView
         android:id="@+id/recycler_item_livros"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/titulopagina"
-        android:verticalScrollbarPosition="right">
+        android:verticalScrollbarPosition="right"
+        android:layout_margin="5dp">
+
     </ListView>
+
+    <RelativeLayout
+        android:id="@+id/emptyList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" >
+
+        <ImageView
+            android:id="@+id/imagemListaVazia"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/add_item_lista"/>
+        <TextView
+            android:id="@+id/avisoSemRegistro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imagemListaVazia"
+            android:gravity="center"
+            android:paddingLeft="40dp"
+            android:paddingTop="5dp"
+            android:paddingRight="40dp"
+            android:text="Faça um cadastro para começar com seu estoque!"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            android:textStyle="bold"/>
+    </RelativeLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/testeB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/cadastrar_livro"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:layout_margin="20dp"
+        android:src="@drawable/cadastrar_livro"
         app:backgroundTint="@color/colorWhite"
-        app:elevation="25dp"/>
+        app:elevation="25dp" />
 
 </RelativeLayout>

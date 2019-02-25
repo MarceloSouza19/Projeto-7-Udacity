@@ -40,6 +40,8 @@ public class FragmentSale extends Fragment implements LoaderManager.LoaderCallba
 
         ListView bookItemList = view.findViewById(R.id.recycler_item_livros);
 
+        bookItemList.setEmptyView(view.findViewById(R.id.emptyListSale));
+
         mCursorAdapter = new BookCursorImageAdapter(getContext(),null);
 
         bookItemList.setAdapter(mCursorAdapter);
