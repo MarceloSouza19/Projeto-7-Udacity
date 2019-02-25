@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="#EEEEEF">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/imagemObjeto"
+                android:layout_width="match_parent"
+                android:layout_height="220dp"
+                android:minHeight="120dp"
+                android:scaleType="centerCrop"
+                android:src="@color/colorWhiteE"/>
+
+            <TextView
+                android:id="@+id/nomeInicio"
+                style="Teste 0101"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/imagemObjeto"
+                android:text="Nome Objeto"
+                android:textSize="40sp"
+                android:layout_margin="10dp"/>
+
+            <TextView
+                android:id="@+id/detalhes"
+                style="@style/Titulos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/nomeInicio"
+                android:text="Breve Descrição do Objeto"
+                android:textSize="20sp"/>
+
+            <TextView
+                android:id="@+id/fornecedor"
+                style="@style/Alinhamento"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/detalhes"
+                android:text="O Fornecedor deste produto é o " />
+
+            <TextView
+                android:id="@+id/fornecedorTelefone"
+                style="@style/Alinhamento"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/fornecedor"
+                android:text="Telefone do fabricante " />
+
+            <TextView
+                android:id="@+id/quantidadeDisponivel"
+                style="@style/Alinhamento"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/fornecedorTelefone"
+                android:text="Quantidade em Estoque " />
+
+            <TextView
+                android:id="@+id/precoAtual"
+                style="@style/Titulos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/quantidadeDisponivel"
+                android:text="Total no estoque em R$"
+                android:textSize="15sp"/>
+
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>

@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Projeto 7 Udacity</string>
+
+    <string name="inserir_teste">Inserir Livro de Teste</string>
+
+    <string name="deletar_tudo">Deletar Tudo</string>
+
+    <string-array name="pageNames">
+        <item>Estoque</item>
+        <item>Informações</item>
+        <item>Sobre o App</item>
+    </string-array>
 </resources>

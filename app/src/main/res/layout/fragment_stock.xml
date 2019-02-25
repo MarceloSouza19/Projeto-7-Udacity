@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhiteE">
+
+    <TextView
+        android:id="@+id/titulopagina"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Todos os Livros Disponíveis"
+        android:textSize="48sp"
+        android:textStyle="bold"
+        android:textColor="@color/colorGrey"
+        android:layout_margin="10dp"/>
+
+    <ListView
+        android:id="@+id/recycler_item_livros"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/titulopagina"
+        android:verticalScrollbarPosition="right">
+    </ListView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/testeB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/cadastrar_livro"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="20dp"
+        app:backgroundTint="@color/colorWhite"
+        app:elevation="25dp"/>
+
+</RelativeLayout>
