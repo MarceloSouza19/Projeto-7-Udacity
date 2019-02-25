@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.example.marce.projeto7udacity.Fragments.FragmentInfoApp;
 import com.example.marce.projeto7udacity.Fragments.FragmentSale;
 import com.example.marce.projeto7udacity.Fragments.FragmentStock;
 
@@ -25,7 +26,7 @@ public class AdapterFragments extends FragmentPagerAdapter {
             case 1:
                 return new FragmentSale();
             case 2:
-                return new FragmentStock();
+                return new FragmentInfoApp();
             default:
                 return null;
         }

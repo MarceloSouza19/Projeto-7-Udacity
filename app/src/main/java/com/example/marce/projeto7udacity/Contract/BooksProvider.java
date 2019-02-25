@@ -11,6 +11,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.marce.projeto7udacity.ConnectionDB.ConnectionDbHelper;
+import com.example.marce.projeto7udacity.R;
 
 public class BooksProvider extends ContentProvider {
 
@@ -57,13 +58,12 @@ public class BooksProvider extends ContentProvider {
                 cursor = dataBase.query(BooksContract.TABLE_NAME, projection, selection, selectionArgs, null, null, sorterOrder);
                 break;
             default:
-                throw new IllegalArgumentException("Não Identificado o método de busca! Verifique a sua URI...");
+                throw new IllegalArgumentException(getContext().getResources().getString(R.string.sem_metodo_busca));
 
         }
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
     }
-
 
     @Override
     public String getType(Uri uri) {
@@ -76,7 +76,7 @@ public class BooksProvider extends ContentProvider {
             case BOOKS_ID:
                 return BooksContract.CONTENT_ITEM_TYPE;
             default:
-                throw new IllegalArgumentException("Não foi possível identificar o tipo de busca! (Item ou Lista)\n URI - "+uri);
+                throw new IllegalArgumentException(getContext().getResources().getString(R.string.sem_metodo_busca)+uri);
         }
     }
 
@@ -89,7 +89,7 @@ public class BooksProvider extends ContentProvider {
             case BOOKS:
                 return insertBooks(uri, contentValues);
             default:
-                throw new IllegalArgumentException("Não reconhecido: \n URI Informada - " + uri);
+                throw new IllegalArgumentException(getContext().getResources().getString(R.string.sem_metodo_busca)+ uri);
         }
 
     }
@@ -99,36 +99,36 @@ public class BooksProvider extends ContentProvider {
         if (contentValues.containsKey(BooksContract.COLUNA_NOME_LIVRO)) {
             String bookName = contentValues.getAsString(BooksContract.COLUNA_NOME_LIVRO);
             if (!(bookName.length() > 0)) {
-                Toast.makeText(getContext(),"O nome do Livro não pode ser em branco!",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),getContext().getResources().getString(R.string.sem_nome),Toast.LENGTH_SHORT).show();
                 return null;
             }
         }
         if (contentValues.containsKey(BooksContract.COLUNA_PREÇO)) {
             double bookPrice = contentValues.getAsDouble(BooksContract.COLUNA_PREÇO);
             if (!(bookPrice > 0 )) {
-                Toast.makeText(getContext(),"Não se pode deixar o preço como 0",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),getContext().getResources().getString(R.string.preco_zerado),Toast.LENGTH_SHORT).show();
                 return null;
             }
             if(bookPrice >= 10000){
-                Toast.makeText(getContext(),"Preço muito alto, não acha?",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),getContext().getResources().getString(R.string.preco_alto),Toast.LENGTH_SHORT).show();
                 return null;
             }
         }
         if (contentValues.containsKey(BooksContract.COLUNA_QUANTIDADE)) {
             int bookQuantity = contentValues.getAsInteger(BooksContract.COLUNA_QUANTIDADE);
             if (!(bookQuantity > 0)) {
-                Toast.makeText(getContext(),"Quantidade Negativa não dá!",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),getContext().getResources().getString(R.string.quantidade_negativa),Toast.LENGTH_SHORT).show();
                 return null;
             }
             if(bookQuantity >= 10000){
-                Toast.makeText(getContext(),"Não cabe isso tudo de material em seu estoque!",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),getContext().getResources().getString(R.string.estoque_alto),Toast.LENGTH_SHORT).show();
                 return null;
             }
         }
         if (contentValues.containsKey(BooksContract.COLUNA_FORNECEDOR)) {
             String bookProvider = contentValues.getAsString(BooksContract.COLUNA_FORNECEDOR);
             if (!(bookProvider.length() > 0)) {
-                Toast.makeText(getContext(),"Quem lhe forneceu o livro mesmo?",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),getContext().getResources().getString(R.string.fornecedor_livro),Toast.LENGTH_SHORT).show();
                 return null;
             }
         }
@@ -138,7 +138,7 @@ public class BooksProvider extends ContentProvider {
         long id = database.insert(BooksContract.TABLE_NAME, null, contentValues);
 
         if (id == -1) {
-            Log.e(LOG_TAG, "Falha ao inserir objeto no BD.\n A URI utilizada foi: " + uri);
+            Log.e(LOG_TAG, getContext().getResources().getString(R.string.sem_metodo_busca)+ uri);
             return null;
         }
 
@@ -171,7 +171,7 @@ public class BooksProvider extends ContentProvider {
 
                 break;
             default:
-                throw new IllegalArgumentException("Não reconhecido!\n URI informada - " + uri);
+                throw new IllegalArgumentException(getContext().getResources().getString(R.string.sem_metodo_busca)+ uri);
         }
 
         getContext().getContentResolver().notifyChange(uri, null);
@@ -199,7 +199,7 @@ public class BooksProvider extends ContentProvider {
                 getContext().getContentResolver().notifyChange(uri, null);
                 return rowsID;
             default:
-                throw new IllegalArgumentException("Não reconhecido! \n URI Informada - " + uri);
+                throw new IllegalArgumentException(getContext().getResources().getString(R.string.sem_metodo_busca) + uri);
         }
     }
 
@@ -208,36 +208,36 @@ public class BooksProvider extends ContentProvider {
         if (contentValues.containsKey(BooksContract.COLUNA_NOME_LIVRO)) {
             String bookName = contentValues.getAsString(BooksContract.COLUNA_NOME_LIVRO);
             if (!(bookName.length() > 0)) {
-                Toast.makeText(getContext(),"O nome do Livro não pode ser em branco!",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),getContext().getResources().getString(R.string.sem_nome),Toast.LENGTH_SHORT).show();
                 return 0;
             }
         }
         if (contentValues.containsKey(BooksContract.COLUNA_PREÇO)) {
             double bookPrice = contentValues.getAsDouble(BooksContract.COLUNA_PREÇO);
             if (!(bookPrice > 0 )) {
-                Toast.makeText(getContext(),"Não se pode deixar o preço como 0",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),getContext().getResources().getString(R.string.preco_zerado),Toast.LENGTH_SHORT).show();
                 return 0;
             }
             if(bookPrice >= 10000){
-                Toast.makeText(getContext(),"Preço muito alto, não acha?",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),getContext().getResources().getString(R.string.preco_alto),Toast.LENGTH_SHORT).show();
                 return 0;
             }
         }
         if (contentValues.containsKey(BooksContract.COLUNA_QUANTIDADE)) {
             int bookQuantity = contentValues.getAsInteger(BooksContract.COLUNA_QUANTIDADE);
-            if (!(bookQuantity > 0)) {
-                Toast.makeText(getContext(),"Quantidade Negativa não dá!",Toast.LENGTH_SHORT).show();
+            if (!(bookQuantity >= 0)) {
+                Toast.makeText(getContext(),getContext().getResources().getString(R.string.quantidade_negativa),Toast.LENGTH_SHORT).show();
                 return 0;
             }
             if(bookQuantity >= 10000){
-                Toast.makeText(getContext(),"Não cabe isso tudo de material em seu estoque!",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),getContext().getResources().getString(R.string.estoque_alto),Toast.LENGTH_SHORT).show();
                 return 0;
             }
         }
         if (contentValues.containsKey(BooksContract.COLUNA_FORNECEDOR)) {
             String bookProvider = contentValues.getAsString(BooksContract.COLUNA_FORNECEDOR);
             if (!(bookProvider.length() > 0)) {
-                Toast.makeText(getContext(),"Quem lhe forneceu o livro mesmo?",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),getContext().getResources().getString(R.string.fornecedor_livro),Toast.LENGTH_SHORT).show();
                 return 0;
             }
         }

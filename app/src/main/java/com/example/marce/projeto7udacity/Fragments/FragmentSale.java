@@ -23,12 +23,13 @@ import android.widget.Toast;
 import com.example.marce.projeto7udacity.Activities.DetailsItemActivity;
 import com.example.marce.projeto7udacity.Activities.EditorOrAddActivity;
 import com.example.marce.projeto7udacity.Adapter.BookCursorAdapter;
+import com.example.marce.projeto7udacity.Adapter.BookCursorImageAdapter;
 import com.example.marce.projeto7udacity.Contract.BooksContract;
 import com.example.marce.projeto7udacity.R;
 
 public class FragmentSale extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    BookCursorAdapter mCursorAdapter;
+    BookCursorImageAdapter mCursorAdapter;
 
     @Nullable
     @Override
@@ -39,7 +40,7 @@ public class FragmentSale extends Fragment implements LoaderManager.LoaderCallba
 
         ListView bookItemList = view.findViewById(R.id.recycler_item_livros);
 
-        mCursorAdapter = new BookCursorAdapter(getContext(),null);
+        mCursorAdapter = new BookCursorImageAdapter(getContext(),null);
 
         bookItemList.setAdapter(mCursorAdapter);
 
@@ -53,7 +54,7 @@ public class FragmentSale extends Fragment implements LoaderManager.LoaderCallba
 
                 intent.setData(currentBookUri);
 
-                Toast.makeText(getContext(),"Processando informações...",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),getContext().getResources().getString(R.string.processando),Toast.LENGTH_SHORT).show();
 
                 getContext().startActivity(intent);
             }
@@ -69,7 +70,8 @@ public class FragmentSale extends Fragment implements LoaderManager.LoaderCallba
         String[] projection = {
                 BooksContract._ID,
                 BooksContract.COLUNA_NOME_LIVRO,
-                BooksContract.COLUNA_DESCRICAO};
+                BooksContract.COLUNA_DESCRICAO,
+                BooksContract.COLUNA_IMAGEM};
 
         // This loader will execute the ContentProvider's query method on a background thread
         return new CursorLoader(getContext(),   // Parent activity context

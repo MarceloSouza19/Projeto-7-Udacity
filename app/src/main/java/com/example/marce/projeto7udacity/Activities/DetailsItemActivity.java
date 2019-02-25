@@ -1,15 +1,20 @@
 package com.example.marce.projeto7udacity.Activities;
 
 import android.app.LoaderManager;
+import android.content.ContentValues;
 import android.content.Loader;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
+import android.view.View;
 import android.view.WindowManager;
 
 import android.content.CursorLoader;
@@ -19,6 +24,7 @@ import android.widget.Toast;
 
 import com.example.marce.projeto7udacity.Contract.BooksContract;
 import com.example.marce.projeto7udacity.R;
+import com.example.marce.projeto7udacity.Utils.Util;
 
 import java.io.ByteArrayOutputStream;
 
@@ -27,16 +33,23 @@ public class DetailsItemActivity extends AppCompatActivity implements LoaderMana
 
     Uri mCurrentBookUri;
 
-    TextView mbookName;
-    TextView mbookPrice;
-    TextView mbookModel;
-    TextView mbookProvider;
-    TextView mbookTelProvider;
-    TextView mbookQuantity;
-    ImageView mbookImage;
+    private TextView mbookName;
+    private TextView mbookPrice;
+    private TextView mbookModel;
+    private TextView mbookProvider;
+    private TextView mbookTelProvider;
+    private TextView mbookQuantity;
+    private TextView btnVenderTxt;
+    private ImageView mbookImage;
+    private CardView btnVender;
 
-    public static int QUALITY_GREAT = 100;
-
+    private String sName;
+    private String sModel;
+    private String dPrice;
+    private String iQuantity;
+    private String sProvider;
+    private String sProviderTel;
+    private byte[] imageObject;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,10 +68,37 @@ public class DetailsItemActivity extends AppCompatActivity implements LoaderMana
         mbookTelProvider = findViewById(R.id.fornecedorTelefone);
         mbookQuantity = findViewById(R.id.quantidadeDisponivel);
         mbookImage = findViewById(R.id.imagemObjeto);
+        btnVender = findViewById(R.id.botaoVender);
+        btnVenderTxt = findViewById(R.id.btnVenderTxt);
 
+        btnVender.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(Integer.valueOf(iQuantity)>0){
+                    iQuantity = String.valueOf(Integer.valueOf(iQuantity)-1);
+                    updateItem();
+                } else{
+                    Toast.makeText(getApplicationContext(),getResources().getString(R.string.sem_decremento), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
         getLoaderManager().initLoader(3, null, this);
     }
 
+    public boolean updateItem(){
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(BooksContract.COLUNA_QUANTIDADE, iQuantity);
+
+        int id = getContentResolver().update(mCurrentBookUri, contentValues, null, null);
+
+        if(id>0){
+            Toast.makeText(getApplicationContext(),getResources().getString(R.string.item_vendido),Toast.LENGTH_LONG).show();
+            return true;
+        }
+
+        return false;
+    }
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
@@ -76,6 +116,7 @@ public class DetailsItemActivity extends AppCompatActivity implements LoaderMana
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onLoadFinished(android.content.Loader<Cursor> loader, Cursor objeto) {
 
@@ -89,33 +130,35 @@ public class DetailsItemActivity extends AppCompatActivity implements LoaderMana
             int providerTelIndex = objeto.getColumnIndex(BooksContract.COLUNA_TELEFONE);
             int imageIndex = objeto.getColumnIndex(BooksContract.COLUNA_IMAGEM);
 
-            String sName = objeto.getString(nameIndex);
-            String sModel = objeto.getString(modelIndex).trim();
-            String dPrice = objeto.getString(priceIndex);
-            String iQuantity = objeto.getString(qtdIndex);
-            String sProvider = objeto.getString(providerIndex);
-            String sProviderTel = objeto.getString(providerTelIndex);
-            byte[] imageObject = objeto.getBlob(imageIndex);
+            sName = objeto.getString(nameIndex);
+            sModel = objeto.getString(modelIndex);
+            dPrice = objeto.getString(priceIndex);
+            iQuantity = objeto.getString(qtdIndex);
+            sProvider = objeto.getString(providerIndex);
+            sProviderTel = objeto.getString(providerTelIndex);
+            imageObject = objeto.getBlob(imageIndex);
 
+            if (imageObject != null) {
 
-            if(imageObject!=null){
-               Bitmap bit = BitmapFactory.decodeByteArray(imageObject, 0, imageObject.length);
-                ByteArrayOutputStream by = new ByteArrayOutputStream();
+                Bitmap picture = Util.getImage(imageObject);
 
-                bit.compress(Bitmap.CompressFormat.PNG, QUALITY_GREAT, by);
-                mbookImage.setImageBitmap(bit);
+                mbookImage.setImageBitmap(picture);
+            } else{
+                mbookImage.setImageResource(R.drawable.no_image);
+                mbookImage.setScaleType(ImageView.ScaleType.CENTER);
             }
 
-
             mbookName.setText(sName);
-            mbookPrice.setText(dPrice);
-            mbookModel.setText(sModel != null ? sModel : "Não Informado dados sobre o produto");
-            mbookProvider.setText(sProvider);
-            mbookTelProvider.setText(sProviderTel);
-            mbookQuantity.setText(iQuantity != null ? "Quantidade disponível no estoque " + iQuantity : "Não existe mais produto deste no estoque!");
+            mbookPrice.setText(getResources().getString(R.string.valor_atual)+dPrice);
+            mbookModel.setText(!sModel.isEmpty() ? sModel : "");
+            mbookProvider.setText(getResources().getString(R.string.fornecedor_produto) +" "+sProvider);
+            mbookTelProvider.setText(!sProviderTel.isEmpty() ? getResources().getString(R.string.telefone_fornecedor)+" "+ sProviderTel : getResources().getString(R.string.sem_telefone_fornecedor));
+            mbookQuantity.setText(iQuantity != null ? getResources().getString(R.string.quantidade_estoque)+" " + iQuantity : getResources().getString(R.string.sem_produto));
 
-        } else if (objeto.getCount() < 1) {
-            return;
+            if(Integer.valueOf(iQuantity)==0){
+                btnVender.setCardBackgroundColor(getColor(R.color.colorGrey));
+                btnVenderTxt.setTextColor(getColor(R.color.colorWhite));
+            }
         }
     }
 
@@ -123,6 +166,4 @@ public class DetailsItemActivity extends AppCompatActivity implements LoaderMana
     public void onLoaderReset(android.content.Loader<Cursor> loader) {
         loader.reset();
     }
-
-
 }

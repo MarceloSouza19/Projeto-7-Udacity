@@ -15,10 +15,7 @@ import com.example.marce.projeto7udacity.Adapter.BookCursorAdapter;
 import com.example.marce.projeto7udacity.ConnectionDB.ConnectionDbHelper;
 import com.example.marce.projeto7udacity.R;
 
-public class TelaPrincipalActivity extends AppCompatActivity{
-
-    ConnectionDbHelper dbHelper = new ConnectionDbHelper(this);
-    BookCursorAdapter mCursorAdapter;
+public class HomeScreenActivity extends AppCompatActivity{
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -39,8 +36,6 @@ public class TelaPrincipalActivity extends AppCompatActivity{
 
         tabLayoutMain.getTabAt(0).setIcon(R.drawable.tab1_icon);
         tabLayoutMain.getTabAt(1).setIcon(R.drawable.sale);
-        tabLayoutMain.getTabAt(2).setIcon(R.drawable.tab1_icon);
-
-
+        tabLayoutMain.getTabAt(2).setIcon(R.drawable.info_app);
     }
 }

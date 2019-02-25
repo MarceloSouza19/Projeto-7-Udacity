@@ -35,12 +35,12 @@ public class FragmentStock extends Fragment implements LoaderManager.LoaderCallb
 
        View view =  LayoutInflater.from(getContext()).inflate(R.layout.fragment_stock,container,false);
 
-        FloatingActionButton btnFlutuante = (FloatingActionButton) view.findViewById(R.id.testeB);
+        FloatingActionButton btnFlutuante = view.findViewById(R.id.testeB);
         btnFlutuante.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(FragmentStock.super.getContext(), EditorOrAddActivity.class);
-                intent.putExtra("telaEdicao",false);
+
                 getContext().startActivity(intent);
             }
         });

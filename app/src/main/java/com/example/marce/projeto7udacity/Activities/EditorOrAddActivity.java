@@ -7,11 +7,17 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.LightingColorFilter;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -19,7 +25,9 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +35,7 @@ import com.example.marce.projeto7udacity.Adapter.BookCursorAdapter;
 import com.example.marce.projeto7udacity.Contract.BooksContract;
 import com.example.marce.projeto7udacity.Fragments.FragmentStock;
 import com.example.marce.projeto7udacity.R;
+import com.example.marce.projeto7udacity.Utils.Util;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
@@ -34,36 +43,43 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class EditorOrAddActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private Uri mBookUri;
-    BookCursorAdapter mCursorAdapter;
+    private Util util = new Util();
 
-    TextView mbookName;
-    TextView mbookPrice;
-    TextView mbookModel;
-    TextView mbookProvider;
-    TextView mbookTelProvider;
-    TextView mbookQuantity;
+    private static Bundle savedInstance;
 
-    String mName;
-    double mPrice;
-    String mModel;
-    String mProvider;
-    String mTelProvider;
-    int mQuantity;
-    byte[] imagem;
+    private TextView mbookName;
+    private TextView mbookPrice;
+    private TextView mbookModel;
+    private TextView mbookProvider;
+    private TextView mbookTelProvider;
+    private TextView mbookQuantity;
+    private FloatingActionButton btnFlutuante;
+    private CircleImageView imagemProduto;
 
-    public static int QUALITY_OK = 50;
-    public static int QUALITY_MEDIUM = 30;
+    private static int SPACE_GREAT = 30;
+
+    private String mName;
+    private double mPrice;
+    private String mModel;
+    private String mProvider;
+    private String mTelProvider;
+    private int mQuantity;
+    private byte[] imagemUpdate;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tela_cadastro);
-
         getSupportActionBar().setHomeButtonEnabled(true);
+
+        setContentView(R.layout.activity_tela_cadastro);
 
         mbookName = findViewById(R.id.bookName);
         mbookPrice = findViewById(R.id.bookPrice);
@@ -71,24 +87,28 @@ public class EditorOrAddActivity extends AppCompatActivity
         mbookProvider = findViewById(R.id.bookProvider);
         mbookTelProvider = findViewById(R.id.bookTelProvider);
         mbookQuantity = findViewById(R.id.bookQuantity);
+        imagemProduto = findViewById(R.id.imagemProduto);
 
         Intent intent = getIntent();
 
         mBookUri = intent.getData();
 
         if (mBookUri != null) {
-            setTitle("Editando um Livro");
-           getSupportLoaderManager().initLoader(1,null,this).forceLoad();
+            if(savedInstanceState==null)
+                getSupportLoaderManager().initLoader(1, null, this).forceLoad();
+
+            setTitle(getResources().getString(R.string.editando_livro));
         } else {
-            setTitle("Cadastrando um Livro");
+            setTitle(getResources().getString(R.string.cadastrando_livro));
         }
 
-        FloatingActionButton btnFlutuante = (FloatingActionButton) findViewById(R.id.addPhoto);
+        btnFlutuante = findViewById(R.id.addPhoto);
+
         btnFlutuante.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(intent,1);
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, 1);
             }
         });
 
@@ -98,47 +118,40 @@ public class EditorOrAddActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(resultCode == RESULT_OK && requestCode == 1){
+        if (resultCode == RESULT_OK && requestCode == 1) {
             Uri imageSelected = data.getData();
-
             try {
-                InputStream inputStream = getContentResolver().openInputStream(imageSelected);
-                Bitmap image = BitmapFactory.decodeStream(inputStream);
+                this.imagemUpdate = util.getImageByteCode(imageSelected, getApplicationContext());
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.imagem_selecionada), Toast.LENGTH_SHORT).show();
+                this.imagemProduto.setImageBitmap(Util.getImage(imagemUpdate));
 
-                ByteArrayOutputStream by = new ByteArrayOutputStream();
-                if(image.getDensity()>350)
-                image.compress(Bitmap.CompressFormat.JPEG,QUALITY_MEDIUM,by);
-                else
-                    image.compress(Bitmap.CompressFormat.JPEG,50,by);
-                this.imagem = by.toByteArray();
-                Toast.makeText(getApplicationContext(),"Imagem Selecionada :)",Toast.LENGTH_SHORT).show();
             } catch (FileNotFoundException e) {
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.imagem_erro), Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
             }
-
 
 
         }
     }
 
-    public void setarDados(){
+    public void setData() {
         mName = mbookName.getText().toString().trim();
         mPrice = 0;
-        if(mbookPrice.getText().toString().length()>0){
-            mPrice=Double.valueOf(mbookPrice.getText().toString());
+        if (mbookPrice.getText().toString().length() > 0) {
+            mPrice = Double.valueOf(mbookPrice.getText().toString());
         }
         mModel = mbookModel.getText().toString().trim();
         mProvider = mbookProvider.getText().toString().trim();
         mTelProvider = mbookTelProvider.getText().toString().trim();
         mQuantity = 0;
-        if(mbookQuantity.getText().toString().length()>0){
-            mQuantity=Integer.parseInt(mbookQuantity.getText().toString());
+        if (mbookQuantity.getText().toString().length() > 0) {
+            mQuantity = Integer.parseInt(mbookQuantity.getText().toString());
         }
     }
 
     public boolean saveBook() {
 
-        this.setarDados();
+        this.setData();
 
         ContentValues contentValues = new ContentValues();
 
@@ -149,22 +162,22 @@ public class EditorOrAddActivity extends AppCompatActivity
         contentValues.put(BooksContract.COLUNA_FORNECEDOR, mProvider);
         contentValues.put(BooksContract.COLUNA_TELEFONE, mTelProvider);
 
-        if(this.imagem!=null) {
-                contentValues.put(BooksContract.COLUNA_IMAGEM, imagem);
+        if (this.imagemUpdate != null) {
+            contentValues.put(BooksContract.COLUNA_IMAGEM, imagemUpdate);
         }
-
 
         if (mBookUri == null) {
             Uri newUri = getContentResolver().insert(BooksContract.CONTENT_URI, contentValues);
 
-            if(newUri==null)
+            if (newUri == null)
                 return false;
+            Toast.makeText(getApplicationContext(), getResources().getString(R.string.salvo_sucesso), Toast.LENGTH_SHORT).show();
         } else {
-            int a = getContentResolver().update(mBookUri, contentValues, null, null);
+            int id = getContentResolver().update(mBookUri, contentValues, null, null);
 
-            if(a>0){
-                Toast.makeText(getApplicationContext(),"Atualizado com Sucesso!",Toast.LENGTH_SHORT).show();
-            } else{
+            if (id > 0) {
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.atualizado_sucesso), Toast.LENGTH_SHORT).show();
+            } else {
                 return false;
             }
         }
@@ -176,14 +189,22 @@ public class EditorOrAddActivity extends AppCompatActivity
     public void onBackPressed() {
         // If the pet hasn't changed, continue with handling back button press
         super.onBackPressed();
+        this.onStop();
         return;
+    }
+
+    @Override
+    protected void onStop() {
+        savedInstance=null;
+        super.onStop();
     }
 
     @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int i, @Nullable Bundle bundle) {
 
-        if(mBookUri!=null) {
+
+        if (mBookUri != null) {
             String[] projection = {
                     BooksContract.COLUNA_ID,
                     BooksContract.COLUNA_NOME_LIVRO,
@@ -192,56 +213,74 @@ public class EditorOrAddActivity extends AppCompatActivity
                     BooksContract.COLUNA_QUANTIDADE,
                     BooksContract.COLUNA_FORNECEDOR,
                     BooksContract.COLUNA_TELEFONE,
+                    BooksContract.COLUNA_IMAGEM
             };
 
-           CursorLoader c = new CursorLoader(this, mBookUri, projection, null, null, null);
+            return new CursorLoader(this, mBookUri, projection, null, null, null);
 
-           return c;
         }
         return null;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor objeto) {
 
-        if(objeto!=null && objeto.moveToFirst()) {
+        if (objeto != null && objeto.moveToFirst()) {
+
+            if(savedInstance!=null){
+                if(savedInstance.getBoolean(getResources().getString(R.string.estadoAnterior)))
+                    return;
+            }
+
             int nameIndex = objeto.getColumnIndex(BooksContract.COLUNA_NOME_LIVRO);
             int modelIndex = objeto.getColumnIndex(BooksContract.COLUNA_DESCRICAO);
             int priceIndex = objeto.getColumnIndex(BooksContract.COLUNA_PREÇO);
             int qtdIndex = objeto.getColumnIndex(BooksContract.COLUNA_QUANTIDADE);
             int providerIndex = objeto.getColumnIndex(BooksContract.COLUNA_FORNECEDOR);
             int providerTelIndex = objeto.getColumnIndex(BooksContract.COLUNA_TELEFONE);
+            int imageIndex = objeto.getColumnIndex(BooksContract.COLUNA_IMAGEM);
 
-            String sName = objeto.getString(nameIndex);
-            String sModel = objeto.getString(modelIndex).trim();
-            String dPrice = objeto.getString(priceIndex);
-            String iQuantity = objeto.getString(qtdIndex);
-            String sProvider = objeto.getString(providerIndex);
-            String sProviderTel = objeto.getString(providerTelIndex);
+            mName = objeto.getString(nameIndex);
+            mModel = objeto.getString(modelIndex).trim();
+            mPrice = Double.valueOf(objeto.getString(priceIndex));
+            mQuantity = Integer.valueOf(objeto.getString(qtdIndex));
+            mProvider = objeto.getString(providerIndex);
+            mTelProvider = objeto.getString(providerTelIndex);
+            byte[] imageObject = objeto.getBlob(imageIndex);
+            Bitmap imagem;
 
-            mbookName.setText(sName);
-            mbookPrice.setText(dPrice.toString());
-            mbookModel.setText(sModel != null ? sModel : "Não Informado");
-            mbookProvider.setText(sProvider);
-            mbookTelProvider.setText(sProviderTel);
-            mbookQuantity.setText(iQuantity != null ? iQuantity.toString() : "0");
-        }
-        else if(objeto.getCount()<1){
+            if (imageObject != null) {
+
+                if (imagemUpdate != null && imagemUpdate != imageObject) {
+                    imagem = Util.getImage(this.imagemUpdate);
+                    imagemProduto.setImageBitmap(imagem);
+                } else {
+                    imagem = Util.getImage(imageObject);
+                    imagemProduto.setImageBitmap(imagem);
+                }
+            } else {
+                Drawable drawable = getResources().getDrawable(R.drawable.sem_imagem);
+                imagemProduto.setImageDrawable(drawable);
+                imagemProduto.setPadding(SPACE_GREAT, SPACE_GREAT, SPACE_GREAT, SPACE_GREAT);
+            }
+            mbookName.setText(mName);
+            mbookPrice.setText(String.valueOf(mPrice));
+            mbookModel.setText(mModel != null ? mModel: getResources().getString(R.string.nao_informado));
+            mbookProvider.setText(mProvider);
+            mbookTelProvider.setText(mTelProvider);
+            mbookQuantity.setText(String.valueOf(mQuantity) != null ? String.valueOf(mQuantity) : "0");
+
+        } else if (objeto.getCount() < 1) {
             return;
         }
     }
 
     @Override
-    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-       loader.reset();
-    }
-
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_activity_cadastro, menu);
 
-        if(mBookUri==null){
+        if (mBookUri == null) {
             menu.getItem(1).setVisible(false);
         }
         return true;
@@ -251,12 +290,12 @@ public class EditorOrAddActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.confirmar:
-                if(this.saveBook())
-                finish();
+                if (this.saveBook())
+                    finish();
                 break;
             case R.id.deletar_objeto:
-                if(mBookUri!=null)
-                this.showDeleteConfirmationDialog();
+                if (mBookUri != null)
+                    this.showDeleteConfirmationDialog();
                 break;
 
         }
@@ -264,29 +303,46 @@ public class EditorOrAddActivity extends AppCompatActivity
     }
 
     private void showDeleteConfirmationDialog() {
-        // Create an AlertDialog.Builder and set the message, and click listeners
-        // for the postivie and negative buttons on the dialog.
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Deseja realmente deletar?");
-        builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+        builder.setMessage(getResources().getString(R.string.realmente_deletar));
+        builder.setPositiveButton(getResources().getString(R.string.sim), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                // User clicked the "Delete" button, so delete the pet.
+
                 getContentResolver().delete(mBookUri, null, null);
                 finish();
             }
         });
-        builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getResources().getString(R.string.cancelar), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                // User clicked the "Cancel" button, so dismiss the dialog
-                // and continue editing the pet.
+
                 if (dialog != null) {
                     dialog.dismiss();
                 }
             }
         });
 
-        // Create and show the AlertDialog
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+
+        savedInstanceState.putBoolean("estadoAnterior", true);
+        savedInstance = savedInstanceState;
+
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
+        loader.reset();
+        savedInstance=null;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }

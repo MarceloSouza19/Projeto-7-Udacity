@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fitsSystemWindows="true"
     android:background="#EEEEEF">
 
@@ -75,4 +76,28 @@
 
         </RelativeLayout>
     </ScrollView>
+    <android.support.v7.widget.CardView
+        android:id="@+id/botaoVender"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginBottom="60dp"
+        app:cardBackgroundColor="#FAFAFA"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="10dp"
+        android:layout_alignParentBottom="true">
+
+        <TextView
+            android:id="@+id/btnVenderTxt"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="@string/vender_item"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
+
+    </android.support.v7.widget.CardView>
+
 </RelativeLayout>

@@ -5,9 +5,81 @@
 
     <string name="deletar_tudo">Deletar Tudo</string>
 
+    <string name="estadoAnterior">estadoAnterior</string>
+
     <string-array name="pageNames">
         <item>Estoque</item>
-        <item>Informações</item>
+        <item>Venda</item>
         <item>Sobre o App</item>
     </string-array>
+
+    <!--Labels-->
+    <string name="cadastrando_livro">Cadastrando um Livro</string>
+    <string name="editando_livro">Editando um Livro</string>
+    <string name="vender_item">Vender Item</string>
+    <string name="essencial">Essencial</string>
+    <string name="nome_livro">Nome do Livro</string>
+    <string name="preco_livro">Qual é o preço?</string>
+    <string name="quantidade_estoque_simplificada">Quantidade em Estoque</string>
+    <string name="descritivos">Descritivos</string>
+    <string name="coloque_descricao">Coloque uma Descrição :)</string>
+    <string name="informativos">Informativos</string>
+    <string name="quem_vendeu">Quem foi que te vendeu?</string>
+    <string name="telefone_contato">Telefone para contato</string>
+    <string name="livros_para_vender">Livros à Venda</string>
+    <string name="livros_meu_estoque">Livros Em Meu Estoque</string>
+
+
+    <!--Hints-->
+    <string name="nome_livro_hint">Qual é o nome?</string>
+    <string name="valor_hint">Valor R$</string>
+    <string name="quantidade_hint">Quantidade</string>
+    <string name="colocque_descricao_hint">Agora coloque uma descrição</string>
+    <string name="quem_vendeu_hint">Quem é o fornecedor?</string>
+    <string name="telefone_contato_hint">Telefone, por favor!</string>
+
+    <!-- Mensagens da Aplicação-->
+    <string name="salvo_sucesso">Salvo com Sucesso!</string>
+    <string name="atualizado_sucesso">Atualizado com Sucesso!</string>
+    <string name="imagem_selecionada">Imagem Selecionada :)</string>
+    <string name="imagem_erro">Não foi possível selecionar a imagem! :/</string>
+    <string name="sem_decremento">Você não tem mais item deste no Estoque!</string>
+    <string name="item_vendido">Item Vendido!</string>
+    <string name="sem_dados_produto">Não Informado dados sobre o produto</string>
+    <string name="fornecedor_produto">O Fornecedor deste produto é</string>
+    <string name="valor_atual">Valor atual R$</string>
+    <string name="telefone_fornecedor">O telefone para contato com fornecedor é</string>
+    <string name="sem_telefone_fornecedor">Não foi colocado o telefone do Fornecedor</string>
+    <string name="quantidade_estoque">Quantidade disponível no estoque</string>
+    <string name="sem_produto">Não existe mais produto deste no estoque!</string>
+    <string name="nao_informado">Não Informado</string>
+    <string name="nao_identificado">Não Identificado..</string>
+    <string name="processando">Processando..</string>
+
+
+    <!--Confirmações-->
+    <string name="realmente_deletar">Deseja realmente deletar?</string>
+    <string name="sim">Sim</string>
+    <string name="cancelar">Cancelar</string>
+
+
+    <!--Mensagens Provider-->
+    <string name="sem_metodo_busca">Não Identificado o método de busca! Verifique a sua URI...</string>
+    <string name="sem_nome">O nome do Livro não pode ser em branco!</string>
+    <string name="preco_zerado">Não se pode deixar o preço como 0</string>
+    <string name="preco_alto">Preço muito alto, não acha?</string>
+    <string name="quantidade_negativa">Quantidade Negativa não dá!</string>
+    <string name="estoque_alto">Não cabe isso tudo de material em seu estoque!</string>
+    <string name="fornecedor_livro">Quem lhe forneceu o livro mesmo?</string>
+
+    <!--Considerações Finais-->
+    <string name="informacoes_finais">Informações Finais</string>
+    <string name="versao">"Versão da aplicação - 1.0</string>
+    <string name="autor">Marcelo Souza</string>
+    <string name="consideracoes">Considerações Finais</string>
+    <string name="texto1">Sobre o desenvolvimento do APP, gostaria de expressar a dificuldade que tive para trabalhar com os Cursores, abordado no último capitúlo. Porém mesmo sendo algo complicado de compreender no início, confesso que depois que pega o jeitinho se torna algo divertido.</string>
+    <string name="texto2">Além do mais, utilizei a forma atual da aplicação para treinar a usabilidade com TabLayout e ViewPager, com Fragmentos (recurso extremamente interessante).</string>
+    <string name="agradecimento">Gostaria de agradecer à todos na jornada, onde continuarei estudando o curso Android Developer.</string>
+    <string name="obrigado">Obrigado!</string>
+    <string name="att">Att, Marcelo Souza</string>
 </resources>
