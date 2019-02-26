@@ -176,10 +176,8 @@ public class EditorOrAddActivity extends AppCompatActivity
         contentValues.put(BooksContract.COLUNA_QUANTIDADE, mQuantity);
         contentValues.put(BooksContract.COLUNA_FORNECEDOR, mProvider);
         contentValues.put(BooksContract.COLUNA_TELEFONE, mTelProvider);
+        contentValues.put(BooksContract.COLUNA_IMAGEM, imagemUpdate);
 
-        if (this.imagemUpdate != null) {
-            contentValues.put(BooksContract.COLUNA_IMAGEM, imagemUpdate);
-        }
 
         if (mBookUri == null) {
             Uri newUri = getContentResolver().insert(BooksContract.CONTENT_URI, contentValues);
