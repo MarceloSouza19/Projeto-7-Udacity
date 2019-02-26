@@ -62,7 +62,7 @@ public class EditorOrAddActivity extends AppCompatActivity
     private TextView mbookTelProvider;
     private TextView mbookQuantity;
     private FloatingActionButton btnFlutuante;
-    private CircleImageView imagemProduto;
+    private CircleImageView mbookImage;
 
     private static int SPACE_GREAT = 30;
 
@@ -91,7 +91,7 @@ public class EditorOrAddActivity extends AppCompatActivity
         mbookProvider = findViewById(R.id.bookProvider);
         mbookTelProvider = findViewById(R.id.bookTelProvider);
         mbookQuantity = findViewById(R.id.bookQuantity);
-        imagemProduto = findViewById(R.id.imagemProduto);
+        mbookImage = findViewById(R.id.imagemProduto);
 
         Intent intent = getIntent();
 
@@ -116,6 +116,17 @@ public class EditorOrAddActivity extends AppCompatActivity
             }
         });
 
+        mbookImage.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                mbookImage.setImageResource(R.drawable.sem_imagem);
+                imagemUpdate=null;
+                Toast.makeText(getApplicationContext(),getResources().getString(R.string.imagem_removida),Toast.LENGTH_LONG).show();
+                return true;
+            }
+        });
+
     }
 
     @Override
@@ -127,7 +138,7 @@ public class EditorOrAddActivity extends AppCompatActivity
             try {
                 this.imagemUpdate = util.getImageByteCode(imageSelected, getApplicationContext());
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.imagem_selecionada), Toast.LENGTH_SHORT).show();
-                this.imagemProduto.setImageBitmap(Util.getImage(imagemUpdate));
+                this.mbookImage.setImageBitmap(Util.getImage(imagemUpdate));
 
             } catch (FileNotFoundException e) {
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.imagem_erro), Toast.LENGTH_SHORT).show();
@@ -258,15 +269,15 @@ public class EditorOrAddActivity extends AppCompatActivity
 
                 if (imagemUpdate != null && imagemUpdate != imageObject) {
                     imagem = Util.getImage(this.imagemUpdate);
-                    imagemProduto.setImageBitmap(imagem);
+                    mbookImage.setImageBitmap(imagem);
                 } else {
                     imagem = Util.getImage(imageObject);
-                    imagemProduto.setImageBitmap(imagem);
+                    mbookImage.setImageBitmap(imagem);
                 }
             } else {
                 Drawable drawable = getResources().getDrawable(R.drawable.sem_imagem);
-                imagemProduto.setImageDrawable(drawable);
-                imagemProduto.setPadding(SPACE_GREAT, SPACE_GREAT, SPACE_GREAT, SPACE_GREAT);
+                mbookImage.setImageDrawable(drawable);
+                mbookImage.setPadding(SPACE_GREAT, SPACE_GREAT, SPACE_GREAT, SPACE_GREAT);
             }
             mbookName.setText(mName);
             mbookPrice.setText(String.valueOf(mPrice));

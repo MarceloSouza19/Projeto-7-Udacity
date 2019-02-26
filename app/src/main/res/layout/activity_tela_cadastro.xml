@@ -114,7 +114,8 @@
                     android:id="@+id/bookModel"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:hint="@string/colocque_descricao_hint" />
+                    android:hint="@string/colocque_descricao_hint"
+                    android:maxLength="100"/>
             </LinearLayout>
 
             <TextView
@@ -146,7 +147,8 @@
                     android:id="@+id/bookProvider"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:hint="@string/quem_vendeu_hint" />
+                    android:hint="@string/quem_vendeu_hint"
+                    android:maxLength="40"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -160,7 +162,8 @@
                     android:layout_height="50dp"
                     android:layout_marginTop="10dp"
                     android:hint="@string/telefone_contato_hint"
-                    android:inputType="number" />
+                    android:inputType="number"
+                    android:maxLength="11"/>
             </LinearLayout>
 
             <android.support.design.widget.FloatingActionButton

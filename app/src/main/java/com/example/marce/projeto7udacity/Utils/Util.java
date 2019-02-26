@@ -12,8 +12,8 @@ import java.io.InputStream;
 public class Util {
 
     public static int QUALITY_MEDIUM = 15;
-    public static int QUALITY_GREAT = 30;
-    public static int QUALITY_BETTER = 100;
+    public static int QUALITY_GREAT = 20;
+    public static int QUALITY_BETTER = 40;
 
     public static Bitmap getImage(byte[] imageObject){
 

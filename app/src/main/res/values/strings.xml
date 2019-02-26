@@ -48,16 +48,24 @@
     <string name="imagem_erro">Não foi possível selecionar a imagem! :/</string>
     <string name="sem_decremento">Você não tem mais item deste no Estoque!</string>
     <string name="item_vendido">Item Vendido!</string>
+    <string name="item_decrementado">Retirado um Item de seu Estoque!</string>
+    <string name="item_incrementado">Adicionado mais um item ao seu Estoque!</string>
     <string name="sem_dados_produto">Não Informado dados sobre o produto</string>
     <string name="fornecedor_produto">O Fornecedor deste produto é</string>
     <string name="valor_atual">Valor atual R$</string>
     <string name="telefone_fornecedor">O telefone para contato com fornecedor é</string>
-    <string name="sem_telefone_fornecedor">Não foi colocado o telefone do Fornecedor</string>
+    <string name="sem_telefone_fornecedor">Não foi colocado o telefone no Cadastro :/</string>
     <string name="quantidade_estoque">Quantidade disponível no estoque</string>
     <string name="sem_produto">Não existe mais produto deste no estoque!</string>
     <string name="nao_informado">Não Informado</string>
     <string name="nao_identificado">Não Identificado..</string>
     <string name="processando">Processando..</string>
+    <string name="sem_descricao">Não informado algum detalhamento sobre</string>
+    <string name="solitiar_fornecedor">Solicitar pedido ao Fornecedor</string>
+    <string name="opcoes_rapidas">Algumas Opções Rápidas Disponíveis:</string>
+    <string name="alterar_qtd">Alterar a Quantidade</string>
+    <string name="fazer_pedido">Fazer Pedido</string>
+    <string name="imagem_removida">Imagem Removida!</string>
 
 
     <!--Confirmações-->

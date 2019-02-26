@@ -1,9 +1,12 @@
 package com.example.marce.projeto7udacity.Activities;
 
+import android.Manifest;
 import android.app.LoaderManager;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.content.Loader;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.view.View;
@@ -19,6 +23,7 @@ import android.view.WindowManager;
 
 import android.content.CursorLoader;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +47,10 @@ public class DetailsItemActivity extends AppCompatActivity implements LoaderMana
     private TextView btnVenderTxt;
     private ImageView mbookImage;
     private CardView btnVender;
+    private CardView btnSolicitarForn;
+    private CardView btnBotaoAdd;
+    private CardView btnBotaoDecrement;
+    private LinearLayout solicitarFornArea;
 
     private String sName;
     private String sModel;
@@ -70,30 +79,75 @@ public class DetailsItemActivity extends AppCompatActivity implements LoaderMana
         mbookImage = findViewById(R.id.imagemObjeto);
         btnVender = findViewById(R.id.botaoVender);
         btnVenderTxt = findViewById(R.id.btnVenderTxt);
+        btnSolicitarForn = findViewById(R.id.btnSolicitarForn);
+        btnBotaoAdd = findViewById(R.id.btnBotaoAdd);
+        btnBotaoDecrement = findViewById(R.id.btnDescrement);
+        solicitarFornArea = findViewById(R.id.solicitarFornArea);
+
+        getLoaderManager().initLoader(3, null, this);
 
         btnVender.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(Integer.valueOf(iQuantity)>0){
-                    iQuantity = String.valueOf(Integer.valueOf(iQuantity)-1);
-                    updateItem();
-                } else{
-                    Toast.makeText(getApplicationContext(),getResources().getString(R.string.sem_decremento), Toast.LENGTH_LONG).show();
+                if (Integer.valueOf(iQuantity) > 0) {
+                    iQuantity = String.valueOf(Integer.valueOf(iQuantity) - 1);
+                    if (updateItem())
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.item_vendido), Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.sem_decremento), Toast.LENGTH_LONG).show();
                 }
             }
         });
-        getLoaderManager().initLoader(3, null, this);
+
+        btnBotaoAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                iQuantity = String.valueOf(Integer.valueOf(iQuantity) + 1);
+                if (updateItem())
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.item_incrementado), Toast.LENGTH_LONG).show();
+            }
+        });
+        btnBotaoDecrement.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Integer.valueOf(iQuantity) > 0) {
+                    iQuantity = String.valueOf(Integer.valueOf(iQuantity) - 1);
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.item_decrementado), Toast.LENGTH_LONG).show();
+                    if (updateItem())
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.item_decrementado), Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.sem_decremento), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        btnSolicitarForn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (sProviderTel.isEmpty()) {
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.sem_telefone_fornecedor), Toast.LENGTH_LONG).show();
+                } else {
+                    Intent intent = new Intent(Intent.ACTION_DIAL);
+                    intent.setData(Uri.parse("tel:" + sProviderTel));
+                    if (intent.resolveActivity(getPackageManager()) != null) {
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        getApplicationContext().startActivity(intent);
+                    }
+                }
+
+            }
+        });
+
     }
 
-    public boolean updateItem(){
+    public boolean updateItem() {
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(BooksContract.COLUNA_QUANTIDADE, iQuantity);
 
         int id = getContentResolver().update(mCurrentBookUri, contentValues, null, null);
 
-        if(id>0){
-            Toast.makeText(getApplicationContext(),getResources().getString(R.string.item_vendido),Toast.LENGTH_LONG).show();
+        if (id > 0) {
             return true;
         }
 
@@ -143,21 +197,34 @@ public class DetailsItemActivity extends AppCompatActivity implements LoaderMana
                 Bitmap picture = Util.getImage(imageObject);
 
                 mbookImage.setImageBitmap(picture);
-            } else{
-                mbookImage.setImageResource(R.drawable.no_image);
+            } else {
+                mbookImage.setImageResource(R.drawable.sem_imagem);
                 mbookImage.setScaleType(ImageView.ScaleType.CENTER);
             }
 
             mbookName.setText(sName);
-            mbookPrice.setText(getResources().getString(R.string.valor_atual)+dPrice);
-            mbookModel.setText(!sModel.isEmpty() ? sModel : "");
-            mbookProvider.setText(getResources().getString(R.string.fornecedor_produto) +" "+sProvider);
-            mbookTelProvider.setText(!sProviderTel.isEmpty() ? getResources().getString(R.string.telefone_fornecedor)+" "+ sProviderTel : getResources().getString(R.string.sem_telefone_fornecedor));
-            mbookQuantity.setText(iQuantity != null ? getResources().getString(R.string.quantidade_estoque)+" " + iQuantity : getResources().getString(R.string.sem_produto));
+            mbookPrice.setText(getResources().getString(R.string.valor_atual) + dPrice);
+            mbookModel.setText(!sModel.isEmpty() ? sModel : getResources().getString(R.string.sem_descricao));
+            mbookProvider.setText(getResources().getString(R.string.fornecedor_produto) + " " + sProvider);
+            mbookTelProvider.setText(!sProviderTel.isEmpty() ? getResources().getString(R.string.telefone_fornecedor) + " " + sProviderTel : getResources().getString(R.string.sem_telefone_fornecedor));
+            mbookQuantity.setText(Integer.valueOf(iQuantity) > 0 ? getResources().getString(R.string.quantidade_estoque) + " " + iQuantity : getResources().getString(R.string.sem_produto));
 
-            if(Integer.valueOf(iQuantity)==0){
-                btnVender.setCardBackgroundColor(getColor(R.color.colorGrey));
-                btnVenderTxt.setTextColor(getColor(R.color.colorWhite));
+
+        }
+        if (iQuantity != null) {
+            if (Integer.valueOf(iQuantity) < 5) {
+                solicitarFornArea.setVisibility(View.VISIBLE);
+                if (sProviderTel.isEmpty())
+                    btnSolicitarForn.setCardBackgroundColor(getColor(R.color.colorGrey));
+                if(Integer.valueOf(iQuantity)==0){
+                    btnVender.setCardBackgroundColor(getColor(R.color.colorGrey));
+                    btnVenderTxt.setTextColor(getColor(R.color.colorWhite));
+                } else{
+                    btnVender.setCardBackgroundColor(getColor(R.color.colorWhite));
+                    btnVenderTxt.setTextColor(getColor(R.color.colorAccent));
+                }
+            } else {
+                solicitarFornArea.setVisibility(View.GONE);
             }
         }
     }
