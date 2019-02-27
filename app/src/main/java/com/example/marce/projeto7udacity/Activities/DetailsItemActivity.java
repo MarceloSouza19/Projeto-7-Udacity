@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.WindowManager;
 
 import android.content.CursorLoader;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -47,7 +48,7 @@ public class DetailsItemActivity extends AppCompatActivity implements LoaderMana
     private TextView btnVenderTxt;
     private ImageView mbookImage;
     private CardView btnVender;
-    private CardView btnSolicitarForn;
+    private Button btnSolicitarForn;
     private CardView btnBotaoAdd;
     private CardView btnBotaoDecrement;
     private LinearLayout solicitarFornArea;
@@ -215,7 +216,7 @@ public class DetailsItemActivity extends AppCompatActivity implements LoaderMana
             if (Integer.valueOf(iQuantity) < 5) {
                 solicitarFornArea.setVisibility(View.VISIBLE);
                 if (sProviderTel.isEmpty())
-                    btnSolicitarForn.setCardBackgroundColor(getColor(R.color.colorGrey));
+                    btnSolicitarForn.setBackgroundColor(getColor(R.color.colorGrey));
                 if(Integer.valueOf(iQuantity)==0){
                     btnVender.setCardBackgroundColor(getColor(R.color.colorGrey));
                     btnVenderTxt.setTextColor(getColor(R.color.colorWhite));
